@@ -1,15 +1,62 @@
 ---
 
+- name: Install required packages
+  become: yes
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - git
+
+- name: Create Fabio directories
+  become: yes
+  file:
+    path: "{{ item.value }}"
+    state: directory
+  with_dict: fabio.directories
+
 - name: Download the Go tarball
   become: yes
   get_url:
-    url: "https://storage.googleapis.com/golang/go1.5.1.linux-amd64.tar.gz"
-    dest: "/usr/local/src/go1.5.1.linux-amd64.tar.gz"
-    sha256sum: "2593132ca490b9ee17509d65ee2cd078441ff544899f6afb97a03d08c25524e7"
+    url: "https://storage.googleapis.com/golang/go{{ fabio.go.version }}.linux-amd64.tar.gz"
+    dest: "/usr/local/src/go{{ fabio.go.version }}.linux-amd64.tar.gz"
+    sha256sum: "{{ fabio.go.checksum }}"
     force: no
 
 - name: Extract the Go tarball
   become: yes
-  command: "tar -C /usr/local -xf /usr/local/src/go1.5.1.linux-amd64.tar.gz"
+  command: "tar -C /usr/local -xf /usr/local/src/go{{ fabio.go.version }}.linux-amd64.tar.gz"
   args:
     creates: /usr/local/go
+
+- name: Download and compile Fabio
+  become: yes
+  command: "go get github.com/eBay/fabio"
+  environment:
+    GO15VENDOREXPERIMENT: 1
+    GOPATH: "{{ fabio.directories.install }}"
+    PATH: "{{ fabio.directories.install }}/bin:{{ ansible_env.PATH }}:/usr/local/go/bin"
+  args:
+    chdir: "{{ fabio.directories.install }}"
+    creates: "{{ fabio.directories.install }}/bin/fabio"
+
+- name: Link to Fabio binary
+  become: yes
+  file:
+    dest: /usr/bin/fabio
+    mode: 731
+    src: "{{ fabio.directories.install }}/bin/fabio"
+    state: link
+
+- name: Install Fabio service
+  become: yes
+  template:
+    dest: /etc/init/fabio.conf
+    mode: 0755
+    src: fabio.conf.j2
+
+- name: Enable Fabio service
+  become: yes
+  service:
+    enabled: yes
+    name: fabio

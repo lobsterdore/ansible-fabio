@@ -1,5 +1,15 @@
 ---
 
-- name: Test
-  debug:
-    msg: "{{ hostvars[inventory_hostname]['ansible_' + fabio.device ]['ipv4']['address'] }}"
+- name: Create Fabio config
+  become: yes
+  template:
+    dest: "{{ fabio.directories.config }}/fabio.properties"
+    src: fabio.properties.j2
+  notify:
+    - restart fabio
+
+- name: Start Fabio service
+  become: yes
+  service:
+    state: started
+    name: fabio

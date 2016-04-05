@@ -1,2 +1,19 @@
 ---
-# handlers file for ansible-fabio
+
+- name: start fabio
+  become: yes
+  service:
+    name: fabio
+    state: started
+
+- name: stop fabio
+  become: yes
+  service:
+    name: fabio
+    state: stopped
+
+- name: restart fabio
+  become: yes
+  service:
+    name: fabio
+    state: restarted
