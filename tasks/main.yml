@@ -1,0 +1,11 @@
+---
+
+- name: Install
+  include: install.yml
+  tags:
+    - build
+
+- name: Configure
+  include: configure.yml
+  tags:
+    - configure

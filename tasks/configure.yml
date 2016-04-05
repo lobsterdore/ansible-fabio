@@ -1,0 +1,5 @@
+---
+
+- name: Test
+  debug:
+    msg: "{{ hostvars[inventory_hostname]['ansible_' + fabio.device ]['ipv4']['address'] }}"
