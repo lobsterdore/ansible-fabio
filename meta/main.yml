@@ -12,7 +12,4 @@ galaxy_info:
         - all
   categories:
     - system
-dependencies:
-  - role: ansible-consul
-    src: https://github.com/lobsterdore/ansible-consul
-    version: master
+dependencies: []
