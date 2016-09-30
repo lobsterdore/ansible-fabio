@@ -1,1 +1,8 @@
-proxy.addr = :{{ fabio.port }}
+# {{ ansible_managed }}
+#jinja2:trim_blocks: False
+
+proxy.addr = {{ fabio_properties_port }}
+
+{% for key, value in fabio_properties_additional.iteritems() %}
+{{ key }} = {{ value }}
+{% endfor %}

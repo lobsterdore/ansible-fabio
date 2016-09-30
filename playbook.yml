@@ -1,0 +1,33 @@
+---
+
+- name: Provision role
+  hosts: all
+
+  pre_tasks:
+    - name: Update apt
+      become: yes
+      apt:
+        cache_valid_time: 1800
+        update_cache: yes
+      tags:
+        - build
+
+  roles:
+    - role: lobsterdore.fabio
+
+  post_tasks:
+    - name: Fabio should be running
+      become: yes
+      shell: service fabio status | grep "start/running"
+      args:
+        warn: no
+      tags:
+        - test
+
+    - name: Check Fabio port
+      wait_for:
+        port: 80
+        state: started
+        timeout: 10
+      tags:
+        - test
