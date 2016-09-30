@@ -11,6 +11,6 @@ script
   export GOGC=800
 
   exec /usr/bin/fabio \
-    -cfg {{ fabio.directories.config }}/fabio.properties \
-    >> {{ fabio.directories.log }}/fabio.log 2>&1
+    -cfg {{ fabio_directories_config }}/fabio.properties \
+    >> {{ fabio_directories_log }}/fabio.log 2>&1
 end script

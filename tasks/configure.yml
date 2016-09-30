@@ -3,7 +3,7 @@
 - name: Create Fabio config
   become: yes
   template:
-    dest: "{{ fabio.directories.config }}/fabio.properties"
+    dest: "{{ fabio_directories_config }}/fabio.properties"
     src: fabio.properties.j2
   notify:
     - restart fabio

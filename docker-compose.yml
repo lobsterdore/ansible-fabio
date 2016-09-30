@@ -1,0 +1,12 @@
+version: '2'
+
+services:
+  consul:
+    container_name: consul
+    image: "consul"
+    ports:
+      - "8400:8400"
+      - "8500:8500"
+      - "8600:53/udp"
+    environment:
+      - 'CONSUL_LOCAL_CONFIG={"bootstrap": true}'
