@@ -1,0 +1,17 @@
+---
+
+- name: Create fabio group
+  group:
+    name: fabio
+    system: yes
+    state: present
+
+- name: Create fabio user
+  user:
+    name: fabio
+    comment: "fabio router"
+    shell: /bin/false
+    home: "{{ fabio_home_dir }}"
+    group: fabio
+    system: yes
+    state: present
