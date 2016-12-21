@@ -1,11 +1,19 @@
 ---
 
+fabio_binary_path: /usr/bin
+fabio_checksum_file: "fabio-{{ fabio_version }}.sha256"
+fabio_checksum_file_url: "https://github.com/eBay/fabio/releases/download/v{{ fabio_version }}/{{ fabio_checksum_file }}"
+fabio_create_user: false
 fabio_directories_config: /etc/fabio.d
 fabio_directories_install: /usr/local/src/fabio
 fabio_directories_log: /var/log/fabio
-
+fabio_download_dir: /root
 fabio_go_checksum: "2593132ca490b9ee17509d65ee2cd078441ff544899f6afb97a03d08c25524e7"
 fabio_go_version: 1.5.1
-
-fabio_properties_port: ":80"
+fabio_home_dir: /opt/fabio
+fabio_install_from_source: true
+fabio_pkg:     "fabio-{{ fabio_version }}-go{{ fabio_go_version }}-linux_amd64"
+fabio_pkg_url: "https://github.com/eBay/fabio/releases/download/v{{ fabio_version }}/fabio-{{ fabio_version }}-go{{ fabio_go_version }}-linux_amd64"
 fabio_properties_additional: {}
+fabio_properties_port: ":80"
+fabio_version: 1.3.4

@@ -1,0 +1,19 @@
+---
+
+- name: Get fabio checksums file
+  get_url:
+    url: "{{ fabio_checksum_file_url }}"
+    dest: "{{ fabio_download_dir }}/{{ fabio_checksum_file }}"
+
+- name: Get checksum of fabio binary
+  shell: >
+    grep {{ fabio_pkg }} {{ fabio_download_dir }}/{{ fabio_checksum_file }}
+  register: chksum
+  changed_when: False
+
+- name: Download fabio binary
+  get_url:
+    url:      "{{ fabio_pkg_url }}"
+    dest:     "/usr/local/bin/fabio"
+    mode: 0755
+    checksum: "sha256:{{ chksum.stdout.split(' ')|first }}"

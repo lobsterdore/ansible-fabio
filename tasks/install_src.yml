@@ -1,0 +1,34 @@
+---
+
+- name: Download the Go tarball
+  become: yes
+  get_url:
+    url: "https://storage.googleapis.com/golang/go{{ fabio_go_version }}.linux-amd64.tar.gz"
+    dest: "/usr/local/src/go{{ fabio_go_version }}.linux-amd64.tar.gz"
+    sha256sum: "{{ fabio_go_checksum }}"
+    force: no
+
+- name: Extract the Go tarball
+  become: yes
+  command: "tar -C /usr/local -xf /usr/local/src/go{{ fabio_go_version }}.linux-amd64.tar.gz"
+  args:
+    creates: /usr/local/go
+
+- name: Download and compile Fabio
+  become: yes
+  command: "go get github.com/eBay/fabio"
+  environment:
+    GO15VENDOREXPERIMENT: 1
+    GOPATH: "{{ fabio_directories_install }}"
+    PATH: "{{ fabio_directories_install }}/bin:{{ ansible_env.PATH }}:/usr/local/go/bin"
+  args:
+    chdir: "{{ fabio_directories_install }}"
+    creates: "{{ fabio_directories_install }}/bin/fabio"
+
+- name: Link to Fabio binary
+  become: yes
+  file:
+    dest: /usr/bin/fabio
+    mode: 731
+    src: "{{ fabio_directories_install }}/bin/fabio"
+    state: link
