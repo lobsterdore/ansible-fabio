@@ -4,7 +4,13 @@ required_plugins.each do |plugin|
 end
 
 Vagrant.configure(2) do |config|
-  config.vm.box = "ubuntu/trusty64"
+  config.vm.box = "#{ENV['VAGRANT_BOX'] || 'ubuntu/trusty64'}"
+
+  # Setup Python 2.7 if missing
+  config.vm.provision "shell" do |shell|
+    shell.inline = "apt-get install $1 -y && ln -fs /usr/bin/$1 /usr/bin/python"
+    shell.args   = "python2.7"
+  end
 
   config.vm.provision :docker
   config.vm.provision :docker_compose, yml: ["/vagrant/docker-compose.yml"], run: "always"
