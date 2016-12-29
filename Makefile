@@ -1,3 +1,7 @@
+SHELL:=/bin/bash
+
+VAGRANT_BOX ?= ubuntu/trusty64
+
 .DEFAULT_GOAL := help
 .PHONY: help
 
