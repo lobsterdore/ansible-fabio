@@ -3,6 +3,6 @@
 
 proxy.addr = {{ fabio_properties_port }}
 
-{% for key, value in fabio_properties_additional.iteritems() %}
-{{ key }} = {{ value }}
+{% for key in fabio_properties_additional %}
+{{ key }} = {{ fabio_properties_additional[key] }}
 {% endfor %}
