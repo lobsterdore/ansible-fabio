@@ -28,12 +28,21 @@
 - include: install_binary.yml
   when: not fabio_install_from_source
 
-- name: Install Fabio service
+- name: Install Fabio Upstart service
   become: yes
   template:
     dest: /etc/init/fabio.conf
     mode: 0755
     src: "{{ fabio_service_template }}"
+  when: fabio_use_upstart
+
+- name: Install Fabio systemd service
+  become: yes
+  template:
+    dest: /etc/systemd/system/fabio.service
+    mode: 0755
+    src: fabio.systemd.j2
+  when: fabio_use_systemd
 
 - name: Enable Fabio service
   become: yes

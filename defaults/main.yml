@@ -16,4 +16,6 @@ fabio_pkg:     "fabio-{{ fabio_version }}-go{{ fabio_go_version }}-linux_amd64"
 fabio_pkg_url: "https://github.com/eBay/fabio/releases/download/v{{ fabio_version }}/fabio-{{ fabio_version }}-go{{ fabio_go_version }}-linux_amd64"
 fabio_properties_additional: {}
 fabio_properties_port: ":80"
+fabio_use_upstart: true
+fabio_use_systemd: false
 fabio_version: 1.3.4
