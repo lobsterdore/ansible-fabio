@@ -1,0 +1,18 @@
+# fabio is a fast, modern, zero-conf load balancing HTTP(S) router for deploying applications managed by consul.
+# Home: https://github.com/eBay/fabio
+[Unit]
+Description=Fabio consul router
+Requires=consul.service
+After=consul.service
+
+[Service]
+Environment="GOMAXPROCS=`nproc`"
+Restart=on-failure
+User=fabio
+Group=fabio
+ExecStart={{ fabio_binary_path }}/fabio -cfg {{ fabio_directories_config }}/fabio.properties
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGINT
+
+[Install]
+WantedBy=multi-user.target
