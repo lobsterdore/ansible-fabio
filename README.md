@@ -44,9 +44,18 @@ This role will install Fabio as a system service, the installation process can b
 or from a release binary. Once installed this role will write out a properties file for Fabio
 and ensure that the service is started.
 
+### Installing a Fabio binary
+
+By default this role will download a pre-compiled version of Fabio from the projects Github repository,
+you can change the version installed via the fabio_version var:
+
+```YAML
+fabio_version: 1.4.2
+```
+
 ### Installing Fabio from src
 
-The default installation method is from src with Go 1.7.4 by default, if you wish to
+This installation method will install from src with Go 1.8.1, if you wish to
 install using a different version of Go then you can update the following vars:
 
 ```YAML
@@ -54,17 +63,10 @@ install using a different version of Go then you can update the following vars:
 
 fabio_go_checksum: "47fda42e46b4c3ec93fa5d4d4cc6a748aa3f9411a2a2b7e08e3a6d80d753ec8b"
 fabio_go_version: 1.7.4
-
-```
-
-### Installing a Fabio binary
-
-This will download a pre-compiled version of Fabio from the projects Github repository:
-
-```YAML
 fabio_install_from_source: false
-fabio_version: 1.3.4
+
 ```
+
 
 ### Configuring Fabio
 
