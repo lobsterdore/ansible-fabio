@@ -1,7 +1,6 @@
 ---
 
 - name: Install required packages
-  become: yes
   package:
     name: "{{ item }}"
     state: present
@@ -13,11 +12,11 @@
   when: fabio_create_user
 
 - name: Create Fabio directories
-  become: yes
   file:
     path: "{{ item }}"
     state: directory
   with_items:
+    - "{{ fabio_download_dir }}"
     - "{{ fabio_directories_config }}"
     - "{{ fabio_directories_install }}"
     - "{{ fabio_directories_log }}"
@@ -29,7 +28,6 @@
   when: not fabio_install_from_source
 
 - name: Install Fabio Upstart service
-  become: yes
   template:
     dest: /etc/init/fabio.conf
     mode: 0755
@@ -37,7 +35,6 @@
   when: fabio_use_upstart
 
 - name: Install Fabio systemd service
-  become: yes
   template:
     dest: /etc/systemd/system/fabio.service
     mode: 0755
@@ -45,7 +42,6 @@
   when: fabio_use_systemd
 
 - name: Enable Fabio service
-  become: yes
   service:
     enabled: yes
     name: fabio
