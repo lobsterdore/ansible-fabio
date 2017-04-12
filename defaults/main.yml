@@ -8,7 +8,8 @@ fabio_directories_config: /etc/fabio.d
 fabio_directories_install: /usr/local/src/fabio
 fabio_directories_log: /var/log/fabio
 fabio_download_dir: /usr/local/src/fabio-release
-fabio_go_checksum: "53ab94104ee3923e228a2cb2116e5e462ad3ebaeea06ff04463479d7f12d27ca"
+fabio_go_checksum: "a579ab19d5237e263254f1eac5352efcf1d70b9dacadb6d6bb12b0911ede8994"
+fabio_go_pkg: "go{{ fabio_go_version }}.linux-amd64.tar.gz"
 fabio_go_version: 1.8.1
 fabio_home_dir: /opt/fabio
 fabio_install_from_source: false

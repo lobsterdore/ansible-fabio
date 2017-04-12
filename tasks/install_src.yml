@@ -2,13 +2,13 @@
 
 - name: Download the Go tarball
   get_url:
-    url: "https://storage.googleapis.com/golang/go{{ fabio_go_version }}.linux-amd64.tar.gz"
-    dest: "/usr/local/src/go{{ fabio_go_version }}.linux-amd64.tar.gz"
+    url: "https://storage.googleapis.com/golang/{{ fabio_go_pkg }}"
+    dest: "/usr/local/src/{{ fabio_go_pkg }}"
     sha256sum: "{{ fabio_go_checksum }}"
     force: no
 
 - name: Extract the Go tarball
-  command: "tar -C /usr/local -xf /usr/local/src/go{{ fabio_go_version }}.linux-amd64.tar.gz"
+  command: "tar -C /usr/local -xf /usr/local/src/{{ fabio_go_pkg }}"
   args:
     creates: /usr/local/go
 
