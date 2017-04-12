@@ -14,6 +14,6 @@
 - name: Download fabio binary
   get_url:
     url: "{{ fabio_pkg_url }}"
-    dest: "/usr/local/bin/fabio"
+    dest: "{{ fabio_binary_path }}/fabio"
     mode: 0755
     checksum: "sha256:{{ chksum.stdout.split(' ')|first }}"
