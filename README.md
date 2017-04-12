@@ -29,7 +29,7 @@ In requirements file:
 # requirements.yml
 
 - src: lobsterdore.fabio
-  version: v1.0.0
+  version: v1.2
 
 ```
 
