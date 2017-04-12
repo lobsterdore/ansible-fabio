@@ -7,15 +7,15 @@ fabio_create_user: false
 fabio_directories_config: /etc/fabio.d
 fabio_directories_install: /usr/local/src/fabio
 fabio_directories_log: /var/log/fabio
-fabio_download_dir: /root
+fabio_download_dir: /usr/local/src/fabio-release
 fabio_go_checksum: "53ab94104ee3923e228a2cb2116e5e462ad3ebaeea06ff04463479d7f12d27ca"
-fabio_go_version: 1.8
+fabio_go_version: 1.8.1
 fabio_home_dir: /opt/fabio
-fabio_install_from_source: true
-fabio_pkg:     "fabio-{{ fabio_version }}-go{{ fabio_go_version }}-linux_amd64"
+fabio_install_from_source: false
+fabio_pkg: "fabio-{{ fabio_version }}-go{{ fabio_go_version }}-linux_amd64"
 fabio_pkg_url: "https://github.com/eBay/fabio/releases/download/v{{ fabio_version }}/fabio-{{ fabio_version }}-go{{ fabio_go_version }}-linux_amd64"
 fabio_properties_additional: {}
 fabio_properties_port: ":80"
 fabio_use_upstart: true
 fabio_use_systemd: false
-fabio_version: 1.3.4
+fabio_version: 1.4.2

@@ -1,7 +1,6 @@
 ---
 
 - name: Create Fabio config
-  become: yes
   template:
     dest: "{{ fabio_directories_config }}/fabio.properties"
     src: fabio.properties.j2
@@ -9,7 +8,6 @@
     - restart fabio
 
 - name: Start Fabio service
-  become: yes
   service:
     state: started
     name: fabio
