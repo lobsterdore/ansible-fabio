@@ -1,19 +1,76 @@
 ---
 
+- block:
+    - name: Get hashicorp gpg key file from keybase
+      get_url:
+        url: https://keybase.io/hashicorp/key.asc
+        dest: "{{ fabio_download_dir }}/hashicorp.asc"
+        validate_certs: "{{ fabio_validate_certs }}"
+
+    - name: install gnupg package
+      become: yes
+      package:
+        name: gnupg
+        state: present
+
+    - name: import hashicorp gpg key
+      command: gpg --import "{{ fabio_download_dir }}/hashicorp.asc"
+      changed_when: no
+
+    - name: Get fabio checksum signature file
+      get_url:
+        url: "{{ fabio_signature_url }}"
+        dest: "{{ fabio_download_dir }}/{{ fabio_signature_file }}"
+        validate_certs: "{{ fabio_validate_certs }}"
+        force: yes
+  when: fabio_verify_checksum_signature
+
 - name: Get fabio checksums file
   get_url:
     url: "{{ fabio_checksum_file_url }}"
     dest: "{{ fabio_download_dir }}/{{ fabio_checksum_file }}"
+    validate_certs: "{{ fabio_validate_certs }}"
+
+- name: Verify checksum file
+  shell: >
+    gpg --batch --verify {{ fabio_download_dir }}/{{ fabio_signature_file }} {{ fabio_download_dir }}/{{ fabio_checksum_file }}
+  changed_when: no
+  register: gpg_check
+  when: fabio_verify_checksum_signature
+  failed_when: gpg_check.rc == 1
+  tags: gpg_check
 
 - name: Get checksum of fabio binary
   shell: >
     grep {{ fabio_pkg }} {{ fabio_download_dir }}/{{ fabio_checksum_file }}
   register: chksum
   changed_when: False
+  tags:
+    - skip_ansible_lint
+
+- name: Set fact to determine absolute path for fabio binary
+  set_fact:
+    fabio_binary_path_fact: "{{ fabio_binary_path + '/fabio-' + fabio_version if fabio_symlink|bool else fabio_binary_path }}"
+  tags: always
+
+- name: Create fabio binary directory
+  file:
+    state: directory
+    path: "{{ fabio_binary_path_fact }}"
+    recurse: yes
+  when: fabio_symlink
 
 - name: Download fabio binary
   get_url:
     url: "{{ fabio_pkg_url }}"
-    dest: "{{ fabio_binary_path }}/fabio"
+    dest: "{{ fabio_binary_path_fact }}/fabio"
     mode: 0755
     checksum: "sha256:{{ chksum.stdout.split(' ')|first }}"
+    validate_certs: "{{ fabio_validate_certs }}"
+
+- name: Create symlink to fabio binary
+  file:
+    state: link
+    src: "{{ fabio_binary_path_fact }}/fabio"
+    dest: "{{ fabio_binary_path }}/fabio"
+  when: fabio_symlink

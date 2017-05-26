@@ -4,6 +4,7 @@
   template:
     dest: "{{ fabio_directories_config }}/fabio.properties"
     src: fabio.properties.j2
+  when: fabio_configure
   notify:
     - restart fabio
 
@@ -11,3 +12,4 @@
   service:
     state: started
     name: fabio
+  when: fabio_manage_service

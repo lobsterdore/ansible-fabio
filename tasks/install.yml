@@ -20,6 +20,7 @@
     - "{{ fabio_directories_config }}"
     - "{{ fabio_directories_install }}"
     - "{{ fabio_directories_log }}"
+  when: fabio_create_directories
 
 - include: install_src.yml
   when: fabio_install_from_source
@@ -45,3 +46,4 @@
   service:
     enabled: yes
     name: fabio
+  when: fabio_manage_service
