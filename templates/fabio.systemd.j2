@@ -2,8 +2,8 @@
 # Home: https://github.com/eBay/fabio
 [Unit]
 Description=Fabio consul router
-Requires=consul.service
-After=consul.service
+After=syslog.target
+After=network.target
 
 [Service]
 Environment="GOMAXPROCS=`nproc`"
