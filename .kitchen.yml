@@ -1,0 +1,88 @@
+---
+
+driver_config:
+  links:
+    - consul:consul.app.internal
+  name: docker
+  privileged: true
+  run_command: /sbin/init
+  use_sudo: false
+
+transport:
+  connection_timeout: 120
+  forward_agent: true
+  max_ssh_sessions: 5
+
+provisioner:
+  ansible_verbose: true
+  ansible_verbosity: 2
+  extra_vars:
+    fabio_properties_additional:
+      registry.consul.addr: consul.app.internal:8500
+    test_mode: yes
+  hosts: test-kitchen
+  name: ansible_playbook
+  # Ansible is already installed in our base image
+  # skip reinstall to save time
+  require_ansible_omnibus: false
+  require_ansible_repo: false
+  require_ansible_source: false
+  require_chef_for_busser: false
+  require_pip: false
+  require_ruby_for_busser: false
+  sudo_command: "sudo -HE"
+  tags:
+    - build
+    - configure
+    - test
+
+platforms:
+  - name: ubuntu-14.04
+    driver_config:
+      image: ubuntu-upstart:14.04
+      disable_upstart: false
+      provision_command:
+        - apt-get update
+        - apt-get install -y libffi-dev libssl-dev libyaml-cpp-dev apt-transport-https
+        - apt-get install -y python python-dev python-pip python-setuptools git build-essential
+        - pip install pip --upgrade -qqq
+        - pip install setuptools paramiko pycparser pycrypto --upgrade -qqq
+        - "pip install ansible==<%= ENV['ANSIBLE_INSTALL_VERSION'] || '2.2.3.0' %> --upgrade -qqq"
+
+  - name: ubuntu-16.04
+    driver_config:
+      image: solita/ubuntu-systemd:16.04
+      provision_command:
+        - apt-get update
+        - apt-get install -y libffi-dev libssl-dev libyaml-cpp-dev apt-transport-https
+        - apt-get install -y python python-dev python-pip python-setuptools git build-essential
+        - pip install pip --upgrade -qqq
+        - pip install setuptools paramiko pycparser pycrypto --upgrade -qqq
+        - "pip install ansible==<%= ENV['ANSIBLE_INSTALL_VERSION'] || '2.2.3.0' %> --upgrade -qqq"
+
+  - name: centos-6.8
+    driver_config:
+      image: centos:6.8
+      disable_upstart: false
+      provision_command:
+        - rpm -ivh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+        - yum update -y
+        - yum install -y python-devel libffi-devel openssl-devel gcc python-pip redhat-rpm-config
+        - pip install --upgrade pip -qqq
+        - pip install setuptools paramiko pycparser pycrypto --upgrade -qqq
+        - "pip install ansible==<%= ENV['ANSIBLE_INSTALL_VERSION'] || '2.2.3.0' %> --upgrade -qqq"
+
+  - name: centos-7.3
+    driver_config:
+      image: centos:7.3.1611
+      provision_command:
+        - yum install -y epel-release
+        - yum update -y
+        - yum install -y python-devel libffi-devel openssl-devel gcc python-pip redhat-rpm-config
+        - pip install --upgrade pip -qqq
+        - pip install setuptools paramiko pycparser pycrypto --upgrade -qqq
+        - "pip install ansible==<%= ENV['ANSIBLE_INSTALL_VERSION'] || '2.2.3.0' %> --upgrade -qqq"
+      run_options: '--security-opt seccomp=unconfined --stop-signal=SIGRTMIN+3 --tmpfs /run --tmpfs /run/lock -v /sys/fs/cgroup:/sys/fs/cgroup:ro'
+
+suites:
+  - name: default
