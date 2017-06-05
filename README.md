@@ -16,6 +16,13 @@ Installs and configures [Fabio](https://github.com/eBay/fabio).
 
 ## To install
 
+This role has been tested on the following operating systems:
+
+* Centos 6.8
+* Centos 7.3
+* Ubuntu 14.04
+* Ubuntu 16.04
+
 The easiest installation method is via Ansible Galaxy:
 
 ```BASH
@@ -113,6 +120,20 @@ that contains some useful targets for testing, to see a list of targets you can 
 
 ```BASH
 make
+```
+
+To run the tests you will the following prerequisites:
+
+* Docker
+* Python 2.7
+* Python Virtualenv
+* Ruby 2.x
+* Ruby Bundler
+
+You can run the tests like so:
+
+```BASH
+make test
 ```
 
 

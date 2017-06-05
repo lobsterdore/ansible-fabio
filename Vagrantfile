@@ -1,3 +1,8 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
 required_plugins = %w( vagrant-docker-compose )
 required_plugins.each do |plugin|
   exec "vagrant plugin install #{plugin};vagrant #{ARGV.join(" ")}" unless Vagrant.has_plugin? plugin || ARGV[0] == 'plugin'
@@ -16,7 +21,7 @@ Vagrant.configure(2) do |config|
   config.vm.provision :docker_compose, yml: ["/vagrant/docker-compose.yml"], run: "always"
 
   config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "playbook.yml"
+    ansible.playbook = "test/integration/default/default.yml"
     ansible.tags = [
       'build',
       'configure',
