@@ -15,3 +15,20 @@
     group: fabio
     system: yes
     state: present
+
+- name: Allow Fabio to bind to lower ports as non-privileged user
+  capabilities:
+    path: "{{ fabio_binary_path }}/fabio"
+    capability: cap_net_bind_service=+ep
+    state: present
+
+- name: Chown some directories for fabio user
+  file:
+    group: fabio
+    owner: fabio
+    path: "{{ item }}"
+    recurse: yes
+    state: directory
+  with_items:
+    - "{{ fabio_directories_config }}"
+    - "{{ fabio_directories_log }}"

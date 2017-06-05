@@ -2,52 +2,34 @@
 
 group: stable
 dist: trusty
+
 branches:
   only:
     - develop
     - master
 
-language: python
-python: "2.7"
-
 sudo: required
-services: docker
+services:
+    - docker
+
+language: ruby
+rvm:
+  - 2.2
 
 env:
-  - ANSIBLE_INSTALL_VERSION=2.0.2.0
   - ANSIBLE_INSTALL_VERSION=2.1.5.0
-  - ANSIBLE_INSTALL_VERSION=2.2.2.0
+  - ANSIBLE_INSTALL_VERSION=2.2.3.0
   - ANSIBLE_INSTALL_VERSION=2.3.0.0
 
 before_install:
   - sudo apt-get update -qq
 
 install:
-  - pip install ansible==${ANSIBLE_INSTALL_VERSION} ansible-lint
-  - pip install virtualenv
+  - sudo pip install ansible-lint virtualenv
 
 script:
-  # Setup
-  - make travis_test_deps
-  - make test_deps
-  #Test formatting
-  - make lint
-  # Run the "build" stage
-  - ansible-playbook -i 'localhost,' -c local playbook.yml --tags=build -vvvv
-  - >
-    ansible-playbook -i 'localhost,' -c local playbook.yml --tags=build
-    | grep -q 'changed=0.*failed=0'
-    && (echo 'Idempotence test: pass' && exit 0)
-    || (echo 'Idempotence test: fail' && exit 1)
-  # Run the "configure" stage
-  - ansible-playbook -i 'localhost,' -c local playbook.yml --tags=configure -vvvv
-  - >
-    ansible-playbook -i 'localhost,' -c local playbook.yml --tags=configure
-    | grep -q 'changed=0.*failed=0'
-    && (echo 'Idempotence test: pass' && exit 0)
-    || (echo 'Idempotence test: fail' && exit 1)
-  # Run the "test" stage
-  - ansible-playbook -i 'localhost,' -c local playbook.yml --tags=test
+  # Run all tests
+  - make test
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

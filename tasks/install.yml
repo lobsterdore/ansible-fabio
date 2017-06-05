@@ -7,10 +7,6 @@
   with_items:
     - git
 
-- name: Create fabio user
-  include: user.yml
-  when: fabio_create_user
-
 - name: Create Fabio directories
   file:
     path: "{{ item }}"
@@ -28,19 +24,23 @@
 - include: install_binary.yml
   when: not fabio_install_from_source
 
+- name: Create fabio user
+  include: user.yml
+  when: fabio_create_user
+
 - name: Install Fabio Upstart service
   template:
     dest: /etc/init/fabio.conf
     mode: 0755
-    src: "{{ fabio_service_template }}"
-  when: fabio_use_upstart
+    src: fabio.service.upstart.j2
+  when: ansible_service_mgr == "upstart"
 
-- name: Install Fabio systemd service
+- name: Install Fabio Systemd service
   template:
     dest: /etc/systemd/system/fabio.service
     mode: 0755
-    src: fabio.systemd.j2
-  when: fabio_use_systemd
+    src: fabio.service.systemd.j2
+  when: ansible_service_mgr == "systemd"
 
 - name: Enable Fabio service
   service:

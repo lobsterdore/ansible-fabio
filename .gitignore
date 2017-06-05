@@ -1,6 +1,13 @@
+.kitchen.local.yml
+.kitchen/
 .vagrant
-.venv
-lobsterdore.fabio
+bin/
+vendor/
 /meta/.galaxy_install_info
 *.bak
 *.retry
+lobsterdore.*
+*.swp
+Dockerfile*
+*.log
+.venv

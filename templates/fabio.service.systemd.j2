@@ -8,11 +8,14 @@ After=network.target
 [Service]
 Environment="GOMAXPROCS=`nproc`"
 Restart=on-failure
+{% if fabio_create_user %}
 User=fabio
 Group=fabio
-ExecStart={{ fabio_binary_path }}/fabio -cfg {{ fabio_directories_config }}/fabio.properties
+{% endif %}
+ExecStart=/bin/bash -a -c '{{ fabio_binary_path }}/fabio -cfg {{ fabio_directories_config }}/fabio.properties >> {{ fabio_directories_log }}/fabio.log 2>&1'
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGINT
+TimeoutStopSec=5
 
 [Install]
 WantedBy=multi-user.target

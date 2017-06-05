@@ -10,9 +10,9 @@ fabio_directories_config: /etc/fabio.d
 fabio_directories_install: /usr/local/src/fabio
 fabio_directories_log: /var/log/fabio
 fabio_download_dir: /usr/local/src/fabio-release
-fabio_go_checksum: "a579ab19d5237e263254f1eac5352efcf1d70b9dacadb6d6bb12b0911ede8994"
+fabio_go_checksum: "1862f4c3d3907e59b04a757cfda0ea7aa9ef39274af99a784f5be843c80c6772"
 fabio_go_pkg: "go{{ fabio_go_version }}.linux-amd64.tar.gz"
-fabio_go_version: 1.8.1
+fabio_go_version: 1.8.3
 fabio_home_dir: /opt/fabio
 fabio_install_from_source: false
 fabio_manage_service: true
@@ -23,8 +23,6 @@ fabio_properties_port: ":80"
 fabio_signature_file: "{{ fabio_checksum_file }}.sig"
 fabio_signature_url: "https://github.com/eBay/fabio/releases/download/v{{ fabio_version }}/{{ fabio_signature_file }}"
 fabio_symlink: false
-fabio_use_systemd: false
-fabio_use_upstart: true
 fabio_validate_certs: true
 fabio_verify_checksum_signature: true
-fabio_version: 1.4.2
+fabio_version: 1.4.4
