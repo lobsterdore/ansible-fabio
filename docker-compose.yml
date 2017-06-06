@@ -2,11 +2,15 @@ version: '2'
 
 services:
   consul:
+    command: "agent"
     container_name: consul
-    image: "consul"
+    image: consul:0.8.3
+    environment:
+      CONSUL_BIND_INTERFACE: lo
+      CONSUL_CLIENT_INTERFACE: eth0
+      CONSUL_LOCAL_CONFIG: '{"bootstrap_expect":1,"datacenter":"aws-eu-west-1","data_dir":"/var/lib/consul","server":true}'
+    network_mode: default
     ports:
       - "8400:8400"
       - "8500:8500"
       - "8600:53/udp"
-    environment:
-      - 'CONSUL_LOCAL_CONFIG={"bootstrap": true}'

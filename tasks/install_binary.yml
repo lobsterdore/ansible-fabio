@@ -1,28 +1,29 @@
 ---
 
-- block:
-    - name: Get hashicorp gpg key file from keybase
-      get_url:
-        url: https://keybase.io/hashicorp/key.asc
-        dest: "{{ fabio_download_dir }}/hashicorp.asc"
-        validate_certs: "{{ fabio_validate_certs }}"
+- name: Get hashicorp gpg key file from keybase
+  get_url:
+    url: https://keybase.io/hashicorp/key.asc
+    dest: "{{ fabio_download_dir }}/hashicorp.asc"
+    validate_certs: "{{ fabio_validate_certs }}"
+  when: fabio_verify_checksum_signature
 
-    - name: install gnupg package
-      become: yes
-      package:
-        name: gnupg
-        state: present
+- name: install gnupg package
+  package:
+    name: gnupg
+    state: present
+  when: fabio_verify_checksum_signature
 
-    - name: import hashicorp gpg key
-      command: gpg --import "{{ fabio_download_dir }}/hashicorp.asc"
-      changed_when: no
+- name: import hashicorp gpg key
+  command: gpg --import "{{ fabio_download_dir }}/hashicorp.asc"
+  changed_when: no
+  when: fabio_verify_checksum_signature
 
-    - name: Get fabio checksum signature file
-      get_url:
-        url: "{{ fabio_signature_url }}"
-        dest: "{{ fabio_download_dir }}/{{ fabio_signature_file }}"
-        validate_certs: "{{ fabio_validate_certs }}"
-        force: yes
+- name: Get fabio checksum signature file
+  get_url:
+    url: "{{ fabio_signature_url }}"
+    dest: "{{ fabio_download_dir }}/{{ fabio_signature_file }}"
+    validate_certs: "{{ fabio_validate_certs }}"
+    force: yes
   when: fabio_verify_checksum_signature
 
 - name: Get fabio checksums file

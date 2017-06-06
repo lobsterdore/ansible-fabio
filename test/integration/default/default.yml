@@ -3,25 +3,18 @@
 - name: Provision role
   hosts: all
 
-  pre_tasks:
-    - name: Update apt
-      become: yes
-      apt:
-        cache_valid_time: 1800
-        update_cache: yes
-      tags:
-        - build
-
   roles:
-    - role: lobsterdore.fabio
+    - role: ansible-fabio
       become: yes
 
   post_tasks:
     - name: Fabio should be running
       become: yes
-      shell: service fabio status | grep "start/running"
-      args:
-        warn: no
+      service:
+        name: fabio
+        state: started
+      register: fabio_start_check
+      failed_when: fabio_start_check.changed
       tags:
         - test
 
