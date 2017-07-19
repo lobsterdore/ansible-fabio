@@ -18,7 +18,7 @@
 
 - name: Allow Fabio to bind to lower ports as non-privileged user
   capabilities:
-    path: "{{ fabio_binary_path }}/fabio"
+    path: "{{ fabio_binary_path_fact }}/fabio"
     capability: cap_net_bind_service=+ep
     state: present
 
